@@ -1,0 +1,53 @@
+// This is a simple trading strategy that uses consolidation and breakout detection
+//@version=5
+// to enter and exit trades, and includes risk management to help manage potential losses.
+
+// Define the trading symbol and time frame
+symbol = "AAPL"
+timeframe = "1D"
+
+// Define the strategy's lookback period for consolidation and breakout detection
+lookback = 10
+
+// Define the minimum consolidation period (in bars) before detecting a breakout
+min_consolidation_period = 5
+
+// Define the minimum breakout size (in price units) to consider a valid breakout
+min_breakout_size = 5
+
+// Define the maximum stop-loss size (in price units) to use for risk management
+max_stop_loss = 10
+
+// Define the maximum position size (in units of the trading symbol) to use for risk management
+max_position_size = 100
+
+// Define the entry, stop-loss, and target levels for the trade
+entry_level = na
+stop_loss_level = na
+target_level = na
+
+// Define the position size and direction for the trade
+position_size = 0
+position_direction = 0
+
+// Define the current high, low, and close prices for the trading symbol
+high = high(symbol, timeframe)
+low = low(symbol, timeframe)
+close = close(symbol, timeframe)
+
+// Define the previous high, low, and close prices for the trading symbol
+prev_high = highest(high, lookback)
+prev_low = lowest(low, lookback)
+prev_close = close[lookback]
+
+// Check if the market is consolidating by comparing the current high and low prices to the previous high and low prices
+if high == prev_high and low == prev_low and close != prev_close
+    // Calculate the consolidation size and duration
+    consolidation_size = high - low
+    consolidation_duration = barssince(high != prev_high or low != prev_low)
+
+    // Check if the consolidation period is long enough and the breakout size is large enough to consider a valid breakout
+    if consolidation_duration >= min_consolidation_period and consolidation_size >= min_breakout_size
+        // Set the entry level for the trade at the high or low of the consolidation, depending on the breakout direction
+        if close > prev_close
+            entry_
